@@ -7,7 +7,7 @@ import { Check, Copy, ExternalLink, Ticket, Trophy, Wallet } from 'lucide-react'
 import { LOTTO_MINT, LOTTO_POOL_WALLET, POOL_CONNECTED, SOLANA_NETWORK, TOKEN_CONNECTED, explorerAddress, getPoolBalance, getSplBalance, shortAddress } from '@/lib/solana'
 
 const DRAW_TIME_ZONE = 'America/New_York'
-const DRAW_HOUR = 20
+const DRAW_HOUR = 18
 const MINIMUM_LOTTO = 10_000
 
 type DrawState = { target: number; remaining: number; drawing: boolean }
@@ -58,7 +58,7 @@ function ContractSection() {
 function DrawCard({ poolBalance }: { poolBalance: number | null }) {
   const draw = useDailyDraw()
   const connected = POOL_CONNECTED && poolBalance !== null
-  return <article className="draw-card draw-card-red"><div className="draw-card-header"><span className="draw-title"><span className="draw-symbol">✦</span>DAILY LOTTO</span><span className="demo-tag">{connected ? `${poolBalance.toFixed(2)} SOL` : 'POOL NOT CONNECTED'}</span></div><span className="eyebrow">CURRENT POT</span><strong className={`pot-value ${connected ? '' : 'pot-status'}`}>{connected ? `${poolBalance.toFixed(2)} SOL` : 'POOL NOT CONNECTED'}</strong><div className="timer-wrap"><span className="eyebrow">DRAWING IN</span><strong className={`countdown ${draw.drawing ? 'drawing' : ''}`}>{draw.drawing ? 'DRAWING...' : formatTimer(draw.remaining)}</strong><span className="timer-label">NEXT DRAW &nbsp; EVERY DAY AT 8:00 PM ET</span></div><div className="holder-line"><strong>10,000</strong><span>LOTTO MINIMUM</span></div><p>One verified eligible holder wins the daily pot.</p></article>
+  return <article className="draw-card draw-card-red"><div className="draw-card-header"><span className="draw-title"><span className="draw-symbol">✦</span>DAILY LOTTO</span><span className="demo-tag">{connected ? `${poolBalance.toFixed(2)} SOL` : 'POOL NOT CONNECTED'}</span></div><span className="eyebrow">CURRENT POT</span><strong className={`pot-value ${connected ? '' : 'pot-status'}`}>{connected ? `${poolBalance.toFixed(2)} SOL` : 'POOL NOT CONNECTED'}</strong><div className="timer-wrap"><span className="eyebrow">DRAWING IN</span><strong className={`countdown ${draw.drawing ? 'drawing' : ''}`}>{draw.drawing ? 'DRAWING...' : formatTimer(draw.remaining)}</strong><span className="timer-label">NEXT DRAW &nbsp; EVERY DAY AT 6:00 PM ET</span></div><div className="holder-line"><strong>10,000</strong><span>LOTTO MINIMUM</span></div><p>One verified eligible holder wins the daily pot.</p></article>
 }
 
 export function LottoDashboard() {
