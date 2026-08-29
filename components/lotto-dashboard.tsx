@@ -26,10 +26,21 @@ function easternOffset(date: Date) {
 }
 
 function nextEasternDraw(now = new Date()) {
-  const eastern = new Intl.DateTimeFormat('en-US', { timeZone: DRAW_TIME_ZONE, year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: false }).formatToParts(now)
-  const get = (type: string) => Number(eastern.find((part) => part.type === type)?.value)
-  const candidate = new Date(Date.UTC(get('year'), get('month') - 1, get('day'), DRAW_HOUR, 0, 0) + easternOffset(now) * 60_000)
-  if (candidate.getTime() <= now.getTime()) candidate.setUTCDate(candidate.getUTCDate() + 1)
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: DRAW_TIME_ZONE, year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: false }).formatToParts(now)
+  const get = (type: string) => Number(parts.find((part) => part.type === type)?.value)
+  const year = get('year')
+  const month = get('month')
+  const day = get('day')
+  const localMidnight = Date.UTC(year, month - 1, day, DRAW_HOUR, 0, 0)
+  const offsetAtTarget = easternOffset(new Date(localMidnight))
+  const candidate = new Date(localMidnight - offsetAtTarget * 60_000)
+
+  if (candidate.getTime() <= now.getTime()) {
+    const tomorrow = new Date(Date.UTC(year, month - 1, day + 1, DRAW_HOUR, 0, 0))
+    const tomorrowOffset = easternOffset(tomorrow)
+    return tomorrow.getTime() - tomorrowOffset * 60_000
+  }
+
   return candidate.getTime()
 }
 
