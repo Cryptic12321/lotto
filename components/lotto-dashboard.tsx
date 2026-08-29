@@ -75,7 +75,7 @@ function PoolWalletSection() {
     setCopied(true)
     window.setTimeout(() => setCopied(false), 1600)
   }
-  return <section className="pool-wallet-section" aria-label="LOTTO pool rewards wallet"><div><span className="eyebrow">POOL / REWARDS WALLET</span><strong className="pool-wallet-address">{wallet ? shortAddress(wallet) : 'POOL WALLET NOT CONNECTED'}</strong><p>100% of allocated creator rewards are directed to the LOTTO pool wallet.</p></div><div className="contract-actions"><button className="outline-button" onClick={copy} disabled={!wallet}><Copy />{copied ? 'COPIED' : 'COPY ADDRESS'}</button>{wallet && <a className="outline-button" href={explorerAddress(wallet)} target="_blank" rel="noreferrer">VIEW ON SOLSCAN <ExternalLink /></a>}</div></section>
+  return <section className="pool-wallet-section" aria-label="LOTTO pool rewards wallet"><div><span className="eyebrow">POOL / REWARDS WALLET</span><strong className="pool-wallet-address"><span className="pool-wallet-full">{wallet}</span><span className="pool-wallet-short">{shortAddress(wallet)}</span></strong><p>100% of allocated creator rewards are directed to the LOTTO pool wallet.</p></div><div className="contract-actions"><button className="outline-button" onClick={copy} disabled={!wallet}><Copy />{copied ? 'COPIED' : 'COPY ADDRESS'}</button><a className="outline-button" href={explorerAddress(wallet)} target="_blank" rel="noreferrer">VIEW ON SOLSCAN <ExternalLink /></a></div></section>
 }
 
 function DrawCard({ poolBalance }: { poolBalance: number | null }) {

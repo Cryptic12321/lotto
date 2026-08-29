@@ -3,7 +3,7 @@ import { Connection, PublicKey } from '@solana/web3.js'
 export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK ?? 'mainnet-beta'
 export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? 'https://api.mainnet-beta.solana.com'
 export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT_ADDRESS ?? ''
-export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET ?? ''
+export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET || 'ByMUP86dZZynthtgnmkf8ZT3YFgLPM6XPEq847yPWUPa'
 export const LOTTO_PUMP_URL = process.env.NEXT_PUBLIC_LOTTO_PUMP_URL ?? ''
 
 export const HOURLY_POOL = LOTTO_POOL_WALLET
