@@ -26,7 +26,7 @@ function Countdown({ initial }: { initial: number }) {
 }
 
 function DrawCard({ daily = false, onEligibility }: { daily?: boolean; onEligibility: () => void }) {
-  return <article className={`draw-card ${daily ? 'draw-card-dark' : 'draw-card-light'}`}>
+  return <article className={`draw-card ${daily ? 'draw-card-red' : 'draw-card-light'}`}>
     <div className="draw-card-header"><span className="draw-title"><span className="draw-symbol">{daily ? '✦' : '●'}</span>{daily ? 'DAILY JACKPOT' : 'HOURLY DRAW'}</span><span className="demo-tag">DEMO</span></div>
     <span className="eyebrow">CURRENT POT</span><strong className="pot-value">{daily ? '$8,920' : '$1,284.50'}</strong>
     <div className="timer-wrap"><span className="eyebrow">DRAWING IN</span><Countdown initial={daily ? 6 * 3600 + 42 * 60 + 17 : 42 * 60 + 17} /><span className="timer-label">HOURS&nbsp;&nbsp;:&nbsp;&nbsp; MINUTES&nbsp;&nbsp;:&nbsp;&nbsp; SECONDS</span></div>
