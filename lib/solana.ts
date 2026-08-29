@@ -1,10 +1,15 @@
 import { Connection, PublicKey } from '@solana/web3.js'
 
-export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK ?? 'devnet'
-export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? 'https://api.devnet.solana.com'
-export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT ?? ''
-export const HOURLY_POOL = process.env.NEXT_PUBLIC_HOURLY_POOL ?? ''
-export const DAILY_POOL = process.env.NEXT_PUBLIC_DAILY_POOL ?? ''
+export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK ?? 'mainnet-beta'
+export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? 'https://api.mainnet-beta.solana.com'
+export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT_ADDRESS ?? ''
+export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET ?? ''
+export const LOTTO_PUMP_URL = process.env.NEXT_PUBLIC_LOTTO_PUMP_URL ?? ''
+
+export const HOURLY_POOL = LOTTO_POOL_WALLET
+export const DAILY_POOL = LOTTO_POOL_WALLET
+export const TOKEN_CONNECTED = Boolean(publicKeyFrom(LOTTO_MINT))
+export const POOL_CONNECTED = Boolean(publicKeyFrom(LOTTO_POOL_WALLET))
 
 export const connection = new Connection(SOLANA_RPC_URL, 'confirmed')
 
@@ -32,5 +37,6 @@ export async function getPoolBalance(address?: string) {
 }
 
 export function explorerAddress(address: string) {
-  return `https://solscan.io/account/${address}?cluster=${SOLANA_NETWORK}`
+  const cluster = SOLANA_NETWORK === 'mainnet-beta' || SOLANA_NETWORK === 'mainnet' ? '' : `?cluster=${SOLANA_NETWORK}`
+  return `https://solscan.io/account/${address}${cluster}`
 }
