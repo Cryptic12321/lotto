@@ -7,8 +7,8 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
 
 export const metadata: Metadata = {
-  title: 'LOTTO — Small entry. Big upside.',
-  description: 'A transparent, community-powered lottery built for the next wave of Solana.',
+  title: 'LOTTO — Who’s winning next?',
+  description: 'Hold LOTTO. Stay eligible. One holder gets the pot. A friendly Solana community demo.',
   generator: 'v0.app',
 }
 
