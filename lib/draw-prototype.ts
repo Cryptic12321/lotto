@@ -1,4 +1,5 @@
-export const DRAW_TIME_ZONE = 'LOCAL TIME'
+export const DRAW_TIME_ZONE = 'America/New_York'
+export const DRAW_HOUR = 18
 
 export function nextHourlyDrawAt(now = new Date()) {
   const next = new Date(now)
@@ -29,10 +30,9 @@ function easternOffset(date: Date) {
 }
 
 export function nextDrawAt(now = new Date()) {
-  return nextHourlyDrawAt(now)
+  return nextDailyDrawAt(now)
 }
 
-/* Legacy daily scheduler retained for compatibility. */
 function nextDailyDrawAt(now = new Date()) {
   const parts = new Intl.DateTimeFormat('en-US', { timeZone: DRAW_TIME_ZONE, year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: false }).formatToParts(now)
   const get = (type: string) => Number(parts.find((part) => part.type === type)?.value)
