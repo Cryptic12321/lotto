@@ -14,20 +14,21 @@ type TransactionRow = {
 
 function classifyTransaction(transaction: any, mint: string): TransactionRow['type'] {
   const instructions = transaction?.transaction?.message?.instructions ?? []
-  const hasSwapProgram = instructions.some((instruction: any) => {
+  const hasRecognizedSwap = instructions.some((instruction: any) => {
     const program = instruction?.program?.toLowerCase?.() ?? ''
-    return program.includes('jupiter') || program.includes('raydium') || program.includes('orca') || program.includes('pump')
+    return program === 'jupiter' || program === 'raydium' || program === 'orca' || program === 'pump.fun'
   })
-  if (!hasSwapProgram) return 'TRANSACTION'
+  if (!hasRecognizedSwap) return 'TRANSACTION'
 
   const pre = transaction?.meta?.preTokenBalances ?? []
   const post = transaction?.meta?.postTokenBalances ?? []
   const byOwner = new Map<string, number>()
   for (const balance of pre) if (balance?.mint === mint && balance?.owner) byOwner.set(balance.owner, (byOwner.get(balance.owner) ?? 0) - Number(balance?.uiTokenAmount?.uiAmount ?? 0))
   for (const balance of post) if (balance?.mint === mint && balance?.owner) byOwner.set(balance.owner, (byOwner.get(balance.owner) ?? 0) + Number(balance?.uiTokenAmount?.uiAmount ?? 0))
-  const delta = [...byOwner.values()].find((value) => value !== 0)
-  if (delta && delta > 0) return 'BUY'
-  if (delta && delta < 0) return 'SELL'
+  const nonZeroDeltas = [...byOwner.values()].filter((value) => value !== 0)
+  if (nonZeroDeltas.length !== 1) return 'TRANSACTION'
+  if (nonZeroDeltas[0] > 0) return 'BUY'
+  if (nonZeroDeltas[0] < 0) return 'SELL'
   return 'TRANSACTION'
 }
 
@@ -45,7 +46,7 @@ export async function GET() {
         transactions.push(null)
       }
     }
-    const rows = signatures.slice(0, 5).map((item, index) => ({ signature: item.signature, timestamp: transactions[index]?.blockTime ?? item.blockTime ?? null, type: classifyTransaction(transactions[index], mint.toBase58()), solanaUrl: `https://solscan.io/tx/${item.signature}` })).filter((row): row is TransactionRow => Boolean(row.signature))
+    const rows = signatures.slice(0, 5).map((item, index) => ({ signature: item.signature, timestamp: transactions[index]?.blockTime ?? null, type: classifyTransaction(transactions[index], mint.toBase58()), solanaUrl: `https://solscan.io/tx/${item.signature}` })).filter((row): row is TransactionRow => Boolean(row.signature))
     return NextResponse.json({ network: 'mainnet-beta', mint: mint.toBase58(), transactions: rows })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Solana Mainnet RPC request failed'
