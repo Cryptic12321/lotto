@@ -2,6 +2,15 @@ import { Connection, PublicKey } from '@solana/web3.js'
 
 export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK ?? 'mainnet-beta'
 export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? 'https://api.mainnet-beta.solana.com'
+
+const MAINNET_RPC_FALLBACK = 'https://api.mainnet-beta.solana.com'
+const configuredMainnetRpc = process.env.SOLANA_MAINNET_RPC_URL ?? MAINNET_RPC_FALLBACK
+
+export function getMainnetRpcUrl() {
+  const url = configuredMainnetRpc.toLowerCase()
+  if (url.includes('devnet') || url.includes('testnet') || url.includes('localhost')) return MAINNET_RPC_FALLBACK
+  return configuredMainnetRpc
+}
 export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT_ADDRESS || 'CVUZgpPFZvfqtFUYtKCA7tkt1Z4MGAdXMV1ZWvWipump'
 export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET ?? ''
 export const LOTTO_PUMP_URL = process.env.NEXT_PUBLIC_LOTTO_PUMP_URL ?? ''
@@ -19,6 +28,7 @@ const MAINNET_RPC_ENDPOINTS = [
 ]
 
 export const connection = new Connection(SOLANA_RPC_URL, 'confirmed')
+export function getMainnetConnection() { return new Connection(getMainnetRpcUrl(), 'confirmed') }
 
 const poolConnections = MAINNET_RPC_ENDPOINTS.map((endpoint) => new Connection(endpoint, 'confirmed'))
 
