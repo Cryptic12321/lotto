@@ -19,6 +19,7 @@ const MAINNET_RPC_ENDPOINTS = [
 ]
 
 export const connection = new Connection(SOLANA_RPC_URL, 'confirmed')
+export function getMainnetConnection() { return new Connection('https://api.mainnet-beta.solana.com', 'confirmed') }
 
 const poolConnections = MAINNET_RPC_ENDPOINTS.map((endpoint) => new Connection(endpoint, 'confirmed'))
 
