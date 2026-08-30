@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { Check, Copy, ExternalLink, Ticket, Trophy, Wallet } from 'lucide-react'
-import { LOTTO_MINT, LOTTO_POOL_WALLET, POOL_CONNECTED, SOLANA_NETWORK, TOKEN_CONNECTED, explorerAddress, getPoolBalance, getSplBalance, shortAddress } from '@/lib/solana'
+import { LOTTO_MINT, LOTTO_POOL_WALLET, POOL_CONNECTED, SOLANA_NETWORK, TOKEN_CONNECTED, explorerAddress, explorerToken, getPoolBalance, getSplBalance, shortAddress } from '@/lib/solana'
 
 const DRAW_TIME_ZONE = 'America/New_York'
 const DRAW_HOUR = 18
@@ -63,7 +63,7 @@ function useDailyDraw() {
 function ContractSection() {
   const [copied, setCopied] = useState(false)
   const copy = async () => { if (!LOTTO_MINT) return; await navigator.clipboard.writeText(LOTTO_MINT); setCopied(true); window.setTimeout(() => setCopied(false), 1600) }
-  return <section className="contract-section" aria-label="LOTTO contract address"><div><span className="eyebrow">LOTTO CONTRACT</span><strong>{LOTTO_MINT ? <span className="contract-address">{LOTTO_MINT}</span> : 'CA NOT CONNECTED'}</strong></div><div className="contract-actions"><button className="outline-button" onClick={copy} disabled={!LOTTO_MINT}><Copy />{copied ? 'COPIED' : 'COPY CA'}</button>{LOTTO_MINT && <a className="outline-button" href={explorerAddress(LOTTO_MINT)} target="_blank" rel="noreferrer">VIEW ON SOLSCAN <ExternalLink /></a>}</div></section>
+  return <section className="contract-section" aria-label="LOTTO contract address"><div><span className="eyebrow">LOTTO CONTRACT</span><strong>{LOTTO_MINT ? <span className="contract-address">{LOTTO_MINT}</span> : 'CA NOT CONNECTED'}</strong></div><div className="contract-actions"><button className="outline-button" onClick={copy} disabled={!LOTTO_MINT}><Copy />{copied ? 'COPIED' : 'COPY CA'}</button>{LOTTO_MINT && <a className="outline-button" href={explorerToken(LOTTO_MINT)} target="_blank" rel="noreferrer">VIEW ON SOLSCAN <ExternalLink /></a>}</div></section>
 }
 
 function PoolWalletSection() {

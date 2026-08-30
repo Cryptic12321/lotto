@@ -2,7 +2,7 @@ import { Connection, PublicKey } from '@solana/web3.js'
 
 export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK ?? 'mainnet-beta'
 export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? 'https://api.mainnet-beta.solana.com'
-export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT_ADDRESS ?? ''
+export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT_ADDRESS || 'CVUZgpPFZvfqtFUYtKCA7tkt1Z4MGAdXMV1ZWvWipump'
 export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET || 'ByMUP86dZZynthtgnmkf8ZT3YFgLPM6XPEq847yPWUPa'
 export const LOTTO_PUMP_URL = process.env.NEXT_PUBLIC_LOTTO_PUMP_URL ?? ''
 
@@ -39,4 +39,9 @@ export async function getPoolBalance(address?: string) {
 export function explorerAddress(address: string) {
   const cluster = SOLANA_NETWORK === 'mainnet-beta' || SOLANA_NETWORK === 'mainnet' ? '' : `?cluster=${SOLANA_NETWORK}`
   return `https://solscan.io/account/${address}${cluster}`
+}
+
+export function explorerToken(address: string) {
+  const cluster = SOLANA_NETWORK === 'mainnet-beta' || SOLANA_NETWORK === 'mainnet' ? '' : `?cluster=${SOLANA_NETWORK}`
+  return `https://solscan.io/token/${address}${cluster}`
 }
