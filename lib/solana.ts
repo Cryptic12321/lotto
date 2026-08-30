@@ -3,13 +3,15 @@ import { Connection, PublicKey } from '@solana/web3.js'
 export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK ?? 'mainnet-beta'
 export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? 'https://api.mainnet-beta.solana.com'
 export const LOTTO_MINT = process.env.NEXT_PUBLIC_LOTTO_MINT_ADDRESS || 'CVUZgpPFZvfqtFUYtKCA7tkt1Z4MGAdXMV1ZWvWipump'
-export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET || 'ByMUP86dZZynthtgnmkf8ZT3YFgLPM6XPEq847yPWUPa'
+export const LOTTO_POOL_WALLET = process.env.NEXT_PUBLIC_LOTTO_POOL_WALLET ?? ''
 export const LOTTO_PUMP_URL = process.env.NEXT_PUBLIC_LOTTO_PUMP_URL ?? ''
 
 export const HOURLY_POOL = LOTTO_POOL_WALLET
 export const DAILY_POOL = LOTTO_POOL_WALLET
 export const TOKEN_CONNECTED = Boolean(publicKeyFrom(LOTTO_MINT))
-export const POOL_CONNECTED = Boolean(publicKeyFrom(LOTTO_POOL_WALLET))
+export const POOL_WALLET_CONFIGURED = Boolean(LOTTO_POOL_WALLET)
+export const POOL_WALLET_VALID = Boolean(publicKeyFrom(LOTTO_POOL_WALLET))
+export const POOL_CONNECTED = POOL_WALLET_VALID
 
 export const connection = new Connection(SOLANA_RPC_URL, 'confirmed')
 
