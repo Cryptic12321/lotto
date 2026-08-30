@@ -13,7 +13,14 @@ export const POOL_WALLET_CONFIGURED = Boolean(LOTTO_POOL_WALLET)
 export const POOL_WALLET_VALID = Boolean(publicKeyFrom(LOTTO_POOL_WALLET))
 export const POOL_CONNECTED = POOL_WALLET_VALID
 
+const MAINNET_RPC_ENDPOINTS = [
+  'https://api.mainnet-beta.solana.com',
+  'https://solana.public-rpc.com',
+]
+
 export const connection = new Connection(SOLANA_RPC_URL, 'confirmed')
+
+const poolConnections = MAINNET_RPC_ENDPOINTS.map((endpoint) => new Connection(endpoint, 'confirmed'))
 
 export function publicKeyFrom(value?: string) {
   if (!value) return null
@@ -33,9 +40,21 @@ export async function getSplBalance(owner: PublicKey, mintAddress = LOTTO_MINT) 
 
 export async function getPoolBalance(address?: string) {
   const pool = publicKeyFrom(address)
-  if (!pool) return null
-  const lamports = await connection.getBalance(pool)
-  return lamports / 1_000_000_000
+  if (!pool) throw new Error('Invalid LOTTO pool wallet address')
+
+  let lastError: unknown
+  for (const poolConnection of poolConnections) {
+    try {
+      const lamports = await poolConnection.getBalance(pool)
+      return lamports / 1_000_000_000
+    } catch (error) {
+      lastError = error
+    }
+  }
+
+  const reason = lastError instanceof Error ? lastError.message : 'Unknown Mainnet RPC error'
+  console.warn('[v0] Wallet B Mainnet balance lookup failed:', reason)
+  throw new Error(`Wallet B Mainnet balance lookup failed: ${reason}`)
 }
 
 export function explorerAddress(address: string) {
