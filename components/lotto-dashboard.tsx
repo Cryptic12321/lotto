@@ -7,6 +7,7 @@ import { Check, Copy, ExternalLink, Ticket, Trophy, Wallet } from 'lucide-react'
 import { LOTTO_MINT, LOTTO_POOL_WALLET, POOL_CONNECTED, POOL_WALLET_CONFIGURED, POOL_WALLET_VALID, SOLANA_NETWORK, TOKEN_CONNECTED, explorerAddress, explorerToken, getSplBalance, shortAddress } from '@/lib/solana'
 import { LiveTransactions } from '@/components/live-transactions'
 import { SocialLinks } from '@/components/social-links'
+import { nextDrawAt as nextDailyDrawAt } from '@/lib/draw-prototype'
 
 const DRAW_TIME_ZONE = 'local browser time'
 const MINIMUM_LOTTO = 10_000
@@ -25,7 +26,7 @@ function nextHourlyDraw(now = new Date()) {
   return target.getTime()
 }
 
-function nextDailyDraw(now = new Date()) { const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(now); const get = (type: string) => Number(parts.find((part) => part.type === type)?.value); const target = new Date(Date.UTC(get('year'), get('month') - 1, get('day'), 23, 0, 0)); if (target.getTime() <= now.getTime()) target.setUTCDate(target.getUTCDate() + 1); return target.getTime() }
+function nextDailyDraw(now = new Date()) { return nextDailyDrawAt(now) }
 
 function useDrawCountdown(targetFactory: (now?: Date) => number) { const [state, setState] = useState<DrawState>({ target: 0, remaining: 0, drawing: false }); useEffect(() => { setState(() => { const target = targetFactory(); return { target, remaining: Math.max(0, Math.ceil((target - Date.now()) / 1000)), drawing: false } }); const id = window.setInterval(() => setState((current) => { const remaining = Math.ceil((current.target - Date.now()) / 1000); if (remaining <= 0) return { target: targetFactory(), remaining: 0, drawing: true }; return { ...current, remaining, drawing: false } }), 1000); return () => window.clearInterval(id) }, [targetFactory]); return state }
 
